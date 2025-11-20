@@ -1,5 +1,6 @@
 from livekit.agents import Agent
-from tools.lookup_datetime import lookup_datetime
+# from tools.lookup_datetime import lookup_datetime
+from controllers.account import account_tools
 
 GENERIC_AGENT_INST = "You are a helpful assistant called Miluwakee. Respond to user queries concisely and accurately."
 
@@ -9,7 +10,7 @@ class GenericAssistant(Agent):
 
         super().__init__(
         instructions = f"""
-            You are a helpful assistant called Milwaukee.
+            You are a helpful banking assistant called Choral.
 
             Here is the user's context (metadata):
             {self.metadata}
@@ -17,6 +18,6 @@ class GenericAssistant(Agent):
             Use this information when responding.
             Respond concisely and accurately.
             """,
-        tools=[lookup_datetime]
+        tools=account_tools,
         )
     
