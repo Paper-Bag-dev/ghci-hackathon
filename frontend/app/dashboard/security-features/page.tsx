@@ -17,6 +17,7 @@ import { Badge } from '@/components/ui/badge'
 import { Label } from '@/components/ui/label'
 import { Switch } from '@/components/ui/switch'
 import StatisticsCard from '@/components/shadcn-studio/blocks/statistics-card-01'
+import { formatDateTime } from '@/lib/utils/date'
 
 // Mock security data
 interface Device {
@@ -323,7 +324,7 @@ export default function SecurityFeatures() {
                           {device.location}
                         </p>
                         <p className='text-xs text-muted-foreground'>
-                          Last active: {new Date(device.lastActive).toLocaleString()}
+                          Last active: {formatDateTime(device.lastActive)}
                         </p>
                       </div>
                     </div>
@@ -365,7 +366,7 @@ export default function SecurityFeatures() {
                         {login.location} • {login.ipAddress}
                       </p>
                       <p className='text-xs text-muted-foreground'>
-                        {new Date(login.timestamp).toLocaleString()}
+                        {formatDateTime(login.timestamp)}
                       </p>
                     </div>
                     {login.status !== 'success' && (

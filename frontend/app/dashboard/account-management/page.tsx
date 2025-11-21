@@ -18,6 +18,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import StatisticsCard from '@/components/shadcn-studio/blocks/statistics-card-01'
 import { bankingProfile } from '@/lib/banking-data'
 import { userAccounts, accountStatements, taxDocuments } from '@/lib/mock-data/accounts'
+import { formatDate } from '@/lib/utils/date'
 
 export default function AccountManagement() {
   const [isEditing, setIsEditing] = useState(false)
@@ -173,7 +174,7 @@ export default function AccountManagement() {
                           className='flex-1 bg-transparent outline-none'
                         />
                       ) : (
-                        <span>{new Date(profile.dateOfBirth).toLocaleDateString()}</span>
+                        <span>{formatDate(profile.dateOfBirth, 'medium')}</span>
                       )}
                     </div>
                   </div>
