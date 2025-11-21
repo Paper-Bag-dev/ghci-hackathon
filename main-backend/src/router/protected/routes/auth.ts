@@ -1,7 +1,7 @@
 import express from "express";
-import signUp from "../../controller/auth/signUp/signUp";
-import signIn from "../../controller/auth/signIn/signIn";
-import { signInGoogle } from "../../controller/auth/google/signIn";
+import signUp from "../../../controller/auth/signUp/signUp";
+import signIn from "../../../controller/auth/signIn/signIn";
+import { signInGoogle } from "../../../controller/auth/google/signIn";
 
 const router = express.Router();
 

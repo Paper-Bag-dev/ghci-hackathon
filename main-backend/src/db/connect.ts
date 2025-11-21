@@ -1,11 +1,12 @@
 import mongoose from "mongoose";
 
-export async function connectDB(url:string) {
-    return mongoose.connect(url, {dbName : "Capstone-test"})
+export async function connectDB(url: string) {
+  return mongoose
+    .connect(url, { dbName: "finchorus-main" })
     .then(() => {
-        console.log("Connected to DB")
+      console.log("Connected to DB");
     })
     .catch((err) => {
-        console.log(err)
+      console.log(err);
     });
 }

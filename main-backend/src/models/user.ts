@@ -4,9 +4,13 @@ import bcrypt from "bcrypt";
 export interface IUser extends Document {
   username: string;
   email: string;
-  role: "local" | "google";
+  role: "local" | "google" | "clerk";
+  clerkId?: string;
   password?: string;
   googleId?: string;
+  firstName?: string;
+  lastName?: string;
+  image?: string;
 
   comparePassword(candidate: string): Promise<boolean>;
 }
@@ -19,7 +23,7 @@ const userSchema = new Schema<IUser>(
 
     role: {
       type: String,
-      enum: ["local", "google"],
+      enum: ["local", "google", "clerk"],
       default: "local",
       required: true,
     },
@@ -43,6 +47,24 @@ const userSchema = new Schema<IUser>(
       type: String,
       unique: true,
       sparse: true,
+    },
+
+    clerkId: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
+
+    firstName: {
+      type: String,
+    },
+
+    lastName: {
+      type: String,
+    },
+
+    image: {
+      type: String,
     },
   },
   { timestamps: true }

@@ -1,6 +1,6 @@
 import express from "express";
-import fetchUserBalance from "../../controller/agent/account/fetchUserBalance";
-import updateUserBalance from "../../controller/agent/account/updateUserBalance";
+import fetchUserBalance from "../../../controller/agent/account/fetchUserBalance";
+import updateUserBalance from "../../../controller/agent/account/updateUserBalance";
 
 const router = express.Router();
 

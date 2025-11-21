@@ -1,13 +1,17 @@
 import express from "express";
-import signRouter from "./routes/auth";
-import agentRouter from "./routes/agent";
+import publicRouter from "./public/index";
+import protectedRouter from "./protected/index";
 
 const router = express.Router();
 
 router.get("/", (req, res) => {
-  res.send("Hello From Backend Router ~ <3");
+  res.json({
+    status: true,
+    route: "/",
+  });
 });
 
-router.use("/auth", signRouter);
-router.use("/agent", agentRouter);
+router.use("/public", publicRouter);
+router.use("/protected", protectedRouter);
+
 export default router;

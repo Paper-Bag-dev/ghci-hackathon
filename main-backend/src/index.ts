@@ -4,6 +4,7 @@ import { config } from "dotenv";
 import cookieParser from "cookie-parser";
 import { connectDB } from "./db/connect";
 import router from "./router/router";
+import { clerkMiddleware } from "@clerk/express";
 
 config({
   path: ".env",
@@ -20,7 +21,10 @@ app.use(
 );
 
 app.use(express.json());
+app.use(clerkMiddleware());
 app.use(cookieParser());
+
+// public / protected defined inside
 app.use("/api/v1", router);
 
 const PORT = process.env.PORT || 5000;
