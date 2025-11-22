@@ -54,7 +54,7 @@ const TotalEarningCard = ({ earningData, title, earning, trend, percentage, comp
       <CardContent className='flex flex-1 flex-col gap-4'>
         <div className='flex flex-col gap-1'>
           <div className='flex items-center gap-2'>
-            <span className='text-2xl font-semibold'>${earning.toLocaleString()}</span>
+            <span className='text-2xl font-semibold'>${earning.toLocaleString('en-US')}</span>
             <span className='flex items-center gap-1'>
               {trend === 'up' ? <ChevronUpIcon className='size-4' /> : <ChevronDownIcon className='size-4' />}
               <span className='text-sm'>{percentage}%</span>
