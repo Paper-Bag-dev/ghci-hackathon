@@ -3,20 +3,25 @@
 import Link from 'next/link'
 import {
   ArrowRightLeftIcon,
-  CalendarClockIcon,
+  BellIcon,
+  BrainIcon,
+  BuildingIcon,
   ChartNoAxesCombinedIcon,
-  ChartPieIcon,
-  ChartSplineIcon,
-  ClipboardListIcon,
-  Clock9Icon,
-  CrownIcon,
-  HashIcon,
+  ChevronRight,
+  CoinsIcon,
+  CreditCardIcon,
+  DollarSignIcon,
+  HandCoinsIcon,
   LanguagesIcon,
+  LandmarkIcon,
+  PiggyBankIcon,
+  PlusCircleIcon,
   SettingsIcon,
-  SquareActivityIcon,
-  Undo2Icon,
-  UsersIcon,
-  Brain
+  ShieldIcon,
+  SlidersIcon,
+  TrendingUpIcon,
+  UserIcon,
+  WalletIcon
 } from 'lucide-react'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
@@ -28,14 +33,20 @@ import {
   SidebarContent,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
-  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
   SidebarProvider,
   SidebarTrigger
 } from '@/components/ui/sidebar'
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible'
 
 import LanguageDropdown from '@/components/shadcn-studio/blocks/dropdown-language'
 import ProfileDropdown from '@/components/shadcn-studio/blocks/dropdown-profile'
@@ -53,114 +64,216 @@ export default function Layout({ children }: { children: React.ReactNode }) {
               <SidebarGroupContent>
                 <SidebarMenu>
                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild className='mb-3 ' >
+                    <SidebarMenuButton asChild className='mb-3'>
                       <Link href='/'>
                         <BrosBankLogo className='size-10' />
                         <span className='text-[25px] font-semibold'>BrosBank</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
+
                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild tooltip="Dashboard">
+                    <SidebarMenuButton asChild isActive={isActive('/dashboard')} tooltip="Dashboard">
                       <Link href='/dashboard'>
                         <ChartNoAxesCombinedIcon />
                         <span>Dashboard</span>
                       </Link>
                     </SidebarMenuButton>
-                    <SidebarMenuBadge className='bg-primary/10 rounded-full'>5</SidebarMenuBadge>
                   </SidebarMenuItem>
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-            <SidebarGroup>
-              <SidebarGroupLabel>Features</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={isActive('/dashboard/account-overview')} tooltip="Account Overview">
-                      <Link href='/dashboard/account-overview'>
-                        <ChartSplineIcon />
-                        <span>Account Overview</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={isActive('/dashboard/deposit-services')} tooltip="Deposit Services">
-                      <Link href='/dashboard/deposit-services'>
-                        <UsersIcon />
-                        <span>Deposit Services</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
+
+                  <Collapsible asChild defaultOpen className='group/collapsible'>
+                    <SidebarMenuItem>
+                      <CollapsibleTrigger asChild>
+                        <SidebarMenuButton tooltip="Account">
+                          <UserIcon />
+                          <span>Account</span>
+                          <ChevronRight className='ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90' />
+                        </SidebarMenuButton>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <SidebarMenuSub>
+                          <SidebarMenuSubItem>
+                            <SidebarMenuSubButton asChild isActive={isActive('/dashboard/account/user-data')}>
+                              <Link href='/dashboard/account/user-data'>
+                                <span>User Data</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        </SidebarMenuSub>
+                      </CollapsibleContent>
+                    </SidebarMenuItem>
+                  </Collapsible>
+
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild isActive={isActive('/dashboard/card-management')} tooltip="Card Management">
                       <Link href='/dashboard/card-management'>
-                        <ChartPieIcon />
+                        <CreditCardIcon />
                         <span>Card Management</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
+
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild isActive={isActive('/dashboard/chat-with-ai')} tooltip="Chat With AI">
                       <Link href='/dashboard/chat-with-ai'>
-                        <Brain />
+                        <BrainIcon />
                         <span>Chat With AI</span>
                       </Link>
                     </SidebarMenuButton>
-                    <SidebarMenuBadge className='bg-primary/10 rounded-full'>3</SidebarMenuBadge>
                   </SidebarMenuItem>
+
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={isActive('/dashboard/deposit-services')} tooltip="Deposit Services">
+                      <Link href='/dashboard/deposit-services'>
+                        <LandmarkIcon />
+                        <span>Deposit Services</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild isActive={isActive('/dashboard/investments')} tooltip="Investments">
                       <Link href='/dashboard/investments'>
-                        <ArrowRightLeftIcon />
+                        <TrendingUpIcon />
                         <span>Investments</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
-                </SidebarMenu>
-              </SidebarGroupContent>
-            </SidebarGroup>
-            <SidebarGroup>
-              <SidebarGroupLabel>Supporting Features</SidebarGroupLabel>
-              <SidebarGroupContent>
-                <SidebarMenu>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={isActive('/dashboard/alerts-notifications')} tooltip="Alerts & Notifications">
-                      <Link href='/dashboard/alerts-notifications'>
-                        <SquareActivityIcon />
-                        <span>Alerts & Notifications</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
+
+                  <Collapsible asChild defaultOpen className='group/collapsible'>
+                    <SidebarMenuItem>
+                      <CollapsibleTrigger asChild>
+                        <SidebarMenuButton tooltip="Net Banking">
+                          <BuildingIcon />
+                          <span>Net Banking</span>
+                          <ChevronRight className='ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90' />
+                        </SidebarMenuButton>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <SidebarMenuSub>
+                          <Collapsible asChild className=' '>
+                            <SidebarMenuSubItem>
+                              <CollapsibleTrigger asChild>
+                                <SidebarMenuSubButton>
+                                  <TrendingUpIcon className='size-4' />
+                                  <span>Investments</span>
+                                  <ChevronRight className='ml-auto transition-transform duration-200 group-data-[state=open]/ :rotate-90' />
+                                </SidebarMenuSubButton>
+                              </CollapsibleTrigger>
+                              <CollapsibleContent>
+                                <SidebarMenuSub>
+                                  <SidebarMenuSubItem>
+                                    <SidebarMenuSubButton asChild isActive={isActive('/dashboard/net-banking/investments')}>
+                                      <Link href='/dashboard/net-banking/investments'>
+                                        <WalletIcon className='size-4' />
+                                        <span>View Investments</span>
+                                      </Link>
+                                    </SidebarMenuSubButton>
+                                  </SidebarMenuSubItem>
+                                  <SidebarMenuSubItem>
+                                    <SidebarMenuSubButton asChild isActive={isActive('/dashboard/net-banking/investments/create')}>
+                                      <Link href='/dashboard/net-banking/investments/create'>
+                                        <PlusCircleIcon className='size-4' />
+                                        <span>Create Investment</span>
+                                      </Link>
+                                    </SidebarMenuSubButton>
+                                  </SidebarMenuSubItem>
+                                </SidebarMenuSub>
+                              </CollapsibleContent>
+                            </SidebarMenuSubItem>
+                          </Collapsible>
+
+                          <Collapsible asChild className=' '>
+                            <SidebarMenuSubItem>
+                              <CollapsibleTrigger asChild>
+                                <SidebarMenuSubButton>
+                                  <HandCoinsIcon className='size-4' />
+                                  <span>Loans</span>
+                                  <ChevronRight className='ml-auto transition-transform duration-200 group-data-[state=open]/ :rotate-90' />
+                                </SidebarMenuSubButton>
+                              </CollapsibleTrigger>
+                              <CollapsibleContent>
+                                <SidebarMenuSub>
+                                  <SidebarMenuSubItem>
+                                    <SidebarMenuSubButton asChild isActive={isActive('/dashboard/net-banking/loans')}>
+                                      <Link href='/dashboard/net-banking/loans'>
+                                        <CreditCardIcon className='size-4' />
+                                        <span>View Loans</span>
+                                      </Link>
+                                    </SidebarMenuSubButton>
+                                  </SidebarMenuSubItem>
+                                  <SidebarMenuSubItem>
+                                    <SidebarMenuSubButton asChild isActive={isActive('/dashboard/net-banking/loans/create')}>
+                                      <Link href='/dashboard/net-banking/loans/create'>
+                                        <PlusCircleIcon className='size-4' />
+                                        <span>Create Loan</span>
+                                      </Link>
+                                    </SidebarMenuSubButton>
+                                  </SidebarMenuSubItem>
+                                </SidebarMenuSub>
+                              </CollapsibleContent>
+                            </SidebarMenuSubItem>
+                          </Collapsible>
+
+                          <SidebarMenuSubItem>
+                            <SidebarMenuSubButton asChild isActive={isActive('/dashboard/net-banking/deposits')}>
+                              <Link href='/dashboard/net-banking/deposits'>
+                                <PiggyBankIcon className='size-4' />
+                                <span>Deposits</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        </SidebarMenuSub>
+                      </CollapsibleContent>
+                    </SidebarMenuItem>
+                  </Collapsible>
+
+                  <Collapsible asChild defaultOpen className='group/collapsible'>
+                    <SidebarMenuItem>
+                      <CollapsibleTrigger asChild>
+                        <SidebarMenuButton tooltip="Alerts & Notifications">
+                          <BellIcon />
+                          <span>Alerts & Notifications</span>
+                          <ChevronRight className='ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90' />
+                        </SidebarMenuButton>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <SidebarMenuSub>
+                          <SidebarMenuSubItem>
+                            <SidebarMenuSubButton asChild isActive={isActive('/dashboard/alerts-notifications/reminder')}>
+                              <Link href='/dashboard/alerts-notifications/reminder'>
+                                <span>Reminder</span>
+                              </Link>
+                            </SidebarMenuSubButton>
+                          </SidebarMenuSubItem>
+                        </SidebarMenuSub>
+                      </CollapsibleContent>
+                    </SidebarMenuItem>
+                  </Collapsible>
+
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild isActive={isActive('/dashboard/security-features')} tooltip="Security Features">
                       <Link href='/dashboard/security-features'>
-                        <CalendarClockIcon />
+                        <ShieldIcon />
                         <span>Security Features</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
+
                   <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={isActive('/dashboard/net-banking')} tooltip="Net Banking">
-                      <Link href='/dashboard/net-banking'>
-                        <Undo2Icon />
-                        <span>Net Banking</span>
+                    <SidebarMenuButton asChild isActive={isActive('/dashboard/settings')} tooltip="Settings">
+                      <Link href='/dashboard/settings'>
+                        <SettingsIcon />
+                        <span>Settings</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
+
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild isActive={isActive('/dashboard/settings-integrations')} tooltip="Settings & Integrations">
                       <Link href='/dashboard/settings-integrations'>
-                        <SettingsIcon />
+                        <SlidersIcon />
                         <span>Settings & Integrations</span>
-                      </Link>
-                    </SidebarMenuButton>
-                  </SidebarMenuItem>
-                  <SidebarMenuItem>
-                    <SidebarMenuButton asChild isActive={isActive('/dashboard/account-management')} tooltip="Account Management">
-                      <Link href='/dashboard/account-management'>
-                        <UsersIcon />
-                        <span>Account Management</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
