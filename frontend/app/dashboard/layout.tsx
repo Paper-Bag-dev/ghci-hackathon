@@ -67,7 +67,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     <SidebarMenuButton asChild className='mb-3'>
                       <Link href='/'>
                         <BrosBankLogo className='size-10' />
-                        <span className='text-[25px] font-semibold'>BrosBank</span>
+                        <span className='text-[25px] font-semibold'>FinChorus</span>
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
@@ -80,30 +80,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                       </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
-
-                  <Collapsible asChild defaultOpen className='group/collapsible'>
-                    <SidebarMenuItem>
-                      <CollapsibleTrigger asChild>
-                        <SidebarMenuButton tooltip="Account">
-                          <UserIcon />
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={isActive('/dashboard/account')} tooltip="Account">
+                      <Link href='/dashboard/account'>
+                        <UserIcon />
                           <span>Account</span>
-                          <ChevronRight className='ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90' />
-                        </SidebarMenuButton>
-                      </CollapsibleTrigger>
-                      <CollapsibleContent>
-                        <SidebarMenuSub>
-                          <SidebarMenuSubItem>
-                            <SidebarMenuSubButton asChild isActive={isActive('/dashboard/account/user-data')}>
-                              <Link href='/dashboard/account/user-data'>
-                                <span>User Data</span>
-                              </Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        </SidebarMenuSub>
-                      </CollapsibleContent>
-                    </SidebarMenuItem>
-                  </Collapsible>
-
+                        </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild isActive={isActive('/dashboard/card-management')} tooltip="Card Management">
                       <Link href='/dashboard/card-management'>
@@ -228,28 +212,14 @@ export default function Layout({ children }: { children: React.ReactNode }) {
                     </SidebarMenuItem>
                   </Collapsible>
 
-                  <Collapsible asChild defaultOpen className='group/collapsible'>
-                    <SidebarMenuItem>
-                      <CollapsibleTrigger asChild>
-                        <SidebarMenuButton tooltip="Alerts & Notifications">
-                          <BellIcon />
-                          <span>Alerts & Notifications</span>
-                          <ChevronRight className='ml-auto transition-transform duration-200 group-data-[state=open]/collapsible:rotate-90' />
-                        </SidebarMenuButton>
-                      </CollapsibleTrigger>
-                      <CollapsibleContent>
-                        <SidebarMenuSub>
-                          <SidebarMenuSubItem>
-                            <SidebarMenuSubButton asChild isActive={isActive('/dashboard/alerts-notifications/reminder')}>
-                              <Link href='/dashboard/alerts-notifications/reminder'>
-                                <span>Reminder</span>
-                              </Link>
-                            </SidebarMenuSubButton>
-                          </SidebarMenuSubItem>
-                        </SidebarMenuSub>
-                      </CollapsibleContent>
-                    </SidebarMenuItem>
-                  </Collapsible>
+                  <SidebarMenuItem>
+                    <SidebarMenuButton asChild isActive={isActive('/dashboard/alerts-notifications/reminder')} tooltip="Alerts & Reminders">
+                      <Link href='/dashboard/alerts-notifications'>
+                        <BellIcon />
+                        <span>Alerts & Reminders</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
 
                   <SidebarMenuItem>
                     <SidebarMenuButton asChild isActive={isActive('/dashboard/security-features')} tooltip="Security Features">
