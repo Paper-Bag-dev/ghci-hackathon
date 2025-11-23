@@ -83,9 +83,9 @@ Each service is independently deployable for clarity, scalability, and ease of j
 ### **Agent Service (.env)**  
 
 ```
-LIVEKIT_URL=wss://test-project-7fa0i3iz.livekit.cloud
-LIVEKIT_API_KEY=API5vLYzmKr3RsW
-LIVEKIT_API_SECRET=x0G4gMAS9pfZMXFXs1I1fh8pwVAKWZ1WpKVMfk1UQe7B
+LIVEKIT_URL=
+LIVEKIT_API_KEY=
+LIVEKIT_API_SECRET=
 
 STT=assemblyai/universal-streaming
 LLM=openai/gpt-4.1-mini
@@ -93,24 +93,24 @@ TTS=cartesia/sonic-3:9626c31c-bec5-4cca-baa8-f8ba9e84c8bc
 
 BACKEND_URL=http://localhost:5000
 
-CLERK_ID=user_35n5MPjm6HTLT3zsAB2drmbwmMi
+CLERK_ID=
 ```
 
 
 ### **Frontend (.env.local)**  
 
 ```
-NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_...
-CLERK_SECRET_KEY=sk_test_...
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
 
-WEBHOOK_SECRET=whsec_...
+WEBHOOK_SECRET=
 BACKEND_URL=http://localhost:5000
 
-LIVEKIT_API_KEY=API5vLYzmKr3RsW
-LIVEKIT_API_SECRET=x0G4gMAS9pfZMXFXs1I1fh8pwVAKWZ1WpKVMfk1UQe7B
-LIVEKIT_URL=wss://test-project-7fa0i3iz.livekit.cloud
+LIVEKIT_API_KEY=
+LIVEKIT_API_SECRET=
+LIVEKIT_URL=use_your_own
 
-NEXT_PUBLIC_LIVEKIT_URL=wss://test-project-7fa0i3iz.livekit.cloud
+NEXT_PUBLIC_LIVEKIT_URL
 NEXT_PUBLIC_BACKEND_URL=http://localhost:5000
 ```
 
@@ -121,9 +121,9 @@ MONGO_URI=mongodb://localhost:27017
 PORT=5000
 FRONTEND_URL=http://localhost:3000
 
-CLERK_PUBLISHABLE_KEY=pk_test_...
-CLERK_SECRET_KEY=sk_test_...
-CLERKID=user_35n5MPjm6HTLT3zsAB2drmbwmMi
+CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+CLERKID=
 ```
 
 
