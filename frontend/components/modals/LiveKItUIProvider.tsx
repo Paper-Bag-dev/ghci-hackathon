@@ -2,19 +2,15 @@
 
 import { useState, useRef, useEffect } from "react";
 import LiveKitModal from "./LiveKitModal";
-import { BarVisualizer } from "@livekit/components-react";
+import { BarVisualizer, RoomAudioRenderer, RoomContext } from "@livekit/components-react";
 import { useAppContext } from "@/context";
 
 const MINI_WIDTH = 220;
 const MINI_HEIGHT = 100;
 const MARGIN = 24;
 
-export default function LiveKitUIProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const { mainState, agentAudioTrack } = useAppContext();
+export default function LiveKitUIProvider({ children }: { children: React.ReactNode }) {
+  const { mainState, agentAudioTrack, roomInstance } = useAppContext();
   const [open, setOpen] = useState(false);
   const [dockSide, setDockSide] = useState<"left" | "right">("right");
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -68,7 +64,6 @@ export default function LiveKitUIProvider({
     // --- SNAP ONLY BOTTOM LEFT/RIGHT ---
     const width = window.innerWidth;
 
-    // Decide snap side by center of widget
     const snapSide: "left" | "right" =
       position.x + MINI_WIDTH / 2 < width / 2 ? "left" : "right";
 
@@ -96,6 +91,13 @@ export default function LiveKitUIProvider({
 
   return (
     <>
+      {/** 🔊 GLOBAL AUDIO RENDERER — ALWAYS ON */}
+      {roomInstance && (
+        <RoomContext.Provider value={roomInstance}>
+          <RoomAudioRenderer />
+        </RoomContext.Provider>
+      )}
+
       {children}
 
       {/* MINI FLOATING BAR */}
@@ -118,19 +120,12 @@ export default function LiveKitUIProvider({
             height: MINI_HEIGHT,
           }}
         >
-          {/* Static BarVisualizer for idle state */}
-          <BarVisualizer
-            barCount={5}
-            state={mainState}
-            track={agentAudioTrack}
-          />
+          <BarVisualizer barCount={5} state={mainState} track={agentAudioTrack} />
         </div>
       )}
 
       {/* FULL MODAL WHEN OPEN */}
-      {open && (
-        <LiveKitModal dockSide={dockSide} onClose={() => setOpen(false)} />
-      )}
+      {open && <LiveKitModal dockSide={dockSide} onClose={() => setOpen(false)} />}
     </>
   );
 }

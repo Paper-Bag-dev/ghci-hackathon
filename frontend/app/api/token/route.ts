@@ -46,7 +46,7 @@ export async function GET(req: NextRequest) {
     canPublish: true,
     canSubscribe: true,
     agent: true,
-  });
+  })
 
   return NextResponse.json(
     { token: await at.toJwt() },
