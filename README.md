@@ -144,7 +144,7 @@ The entire pipeline operates in **real-time**, creating a fluid and human-like c
 
 ## Todo before finals!:
 1. Add Chat component
-2. Mobile downloadable version
+2. Mobile downloadable PWA version
 3. add a emotion recognition model
 
 ## 🏁 Conclusion
