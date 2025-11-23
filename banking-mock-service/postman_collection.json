@@ -1,0 +1,272 @@
+{
+  "info": {
+    "_postman_id": "245541de-c0ec-4627-9578-25361d9cce79",
+    "name": "Banking Mock Service",
+    "description": "Postman collection for the mock banking service (import into Postman). Base URL variable is `baseUrl`. Replace `seededUserId` and `bobId` with real ObjectIds from your DB after seeding.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "23044745"
+  },
+  "item": [
+    {
+      "name": "Create User",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"abhaymishra@gmail.com\",\n  \"firstName\": \"Abhay\",\n  \"lastName\": \"Mishra\",\n  \"balance\": 2000\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/accounts",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "accounts"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get User",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/accounts/{{seededUserId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "accounts",
+            "{{seededUserId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Balance",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/accounts/{{seededUserId}}/balance",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "accounts",
+            "{{seededUserId}}",
+            "balance"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Transfer Funds",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fromId\": \"{{seededUserId}}\",\n  \"toId\": \"{{otherUserId}}\",\n  \"amount\": 100,\n  \"description\": \"Test transfer\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/transactions/transfer",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "transactions",
+            "transfer"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Transactions",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/transactions/{{seededUserId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "transactions",
+            "{{seededUserId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Reminder",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": \"{{seededUserId}}\",\n  \"title\": \"Pay rent\",\n  \"dueDate\": \"2025-12-01T00:00:00.000Z\",\n  \"amount\": 1200\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/reminders",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "reminders"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List Reminders",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/reminders/{{seededUserId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "reminders",
+            "{{seededUserId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Create Relationship",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"userId\": \"{{seededUserId}}\",\n  \"relatedUserId\": \"{{otherUserId}}\",\n  \"relationType\": \"friend\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/relationships",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "relationships"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Transfer To Relationship",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fromId\": \"{{seededUserId}}\",\n  \"relationshipId\": \"\",\n  \"relatedUserId\": \"{{otherUserId}}\",\n  \"identifier\": \"\",\n  \"amount\": 50,\n  \"description\": \"Payment to friend\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/relationships/transfer",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "relationships",
+            "transfer"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List Relationships",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/relationships/{{seededUserId}}",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "relationships",
+            "{{seededUserId}}"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          ""
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:4000/api"
+    },
+    {
+      "key": "seededUserId",
+      "value": ""
+    },
+    {
+      "key": "otherUserId",
+      "value": ""
+    }
+  ]
+}
