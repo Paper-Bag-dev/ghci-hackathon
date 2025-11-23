@@ -22,5 +22,6 @@ router.get("/reminders/:userId", Reminders.listReminders);
 // Relationships
 router.post("/relationships", Relationships.createRelationship);
 router.get("/relationships/:userId", Relationships.listRelationships);
+router.post("/relationships/transfer", Relationships.sendToRelationship);
 
 export default router;

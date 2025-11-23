@@ -4,26 +4,44 @@ import User from "../models/User.js";
 import Transaction from "../models/Transaction.js";
 
 export const createTransfer = async (req: Request, res: Response) => {
-  const session = await mongoose.startSession();
   try {
     const { fromId, toId, amount, description } = req.body;
     if (!fromId || !toId || !amount)
       return res.status(400).json({ message: "Missing fields" });
+    const tx = await performTransfer(fromId, toId, Number(amount), description);
+    return res.status(201).json({ transaction: tx });
+  } catch (error: any) {
+    console.error(error);
+    if (error && error.status && error.message)
+      return res.status(error.status).json({ message: error.message });
+    return res.status(500).json({ error: "Server error" });
+  }
+};
+
+export const performTransfer = async (
+  fromId: string,
+  toId: string,
+  amount: number,
+  description?: string
+) => {
+  const session = await mongoose.startSession();
+  try {
+    if (!fromId || !toId || !amount)
+      throw { status: 400, message: "Missing fields" };
     const numeric = Number(amount);
-    if (numeric <= 0)
-      return res.status(400).json({ message: "Amount must be > 0" });
+    if (numeric <= 0) throw { status: 400, message: "Amount must be > 0" };
 
     session.startTransaction();
     const fromUser = await User.findById(fromId).session(session);
     const toUser = await User.findById(toId).session(session);
     if (!fromUser || !toUser) {
       await session.abortTransaction();
-      return res.status(404).json({ message: "User(s) not found" });
+      throw { status: 404, message: "User(s) not found" };
     }
 
     if (fromUser.balance < numeric) {
       await session.abortTransaction();
-      return res.status(400).json({ message: "Insufficient funds" });
+      throw { status: 400, message: "Insufficient funds" };
     }
 
     fromUser.balance -= numeric;
@@ -32,7 +50,7 @@ export const createTransfer = async (req: Request, res: Response) => {
     await fromUser.save({ session });
     await toUser.save({ session });
 
-    const tx = await Transaction.create(
+    const txs = await Transaction.create(
       [
         {
           from: fromUser._id,
@@ -48,12 +66,11 @@ export const createTransfer = async (req: Request, res: Response) => {
 
     await session.commitTransaction();
     session.endSession();
-    return res.status(201).json({ transaction: tx[0] });
+    return txs[0];
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
-    console.error(error);
-    return res.status(500).json({ error: "Server error" });
+    throw error;
   }
 };
 

@@ -186,6 +186,33 @@
       "response": []
     },
     {
+      "name": "Transfer To Relationship",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"fromId\": \"{{seededUserId}}\",\n  \"relationshipId\": \"\",\n  \"relatedUserId\": \"{{otherUserId}}\",\n  \"identifier\": \"\",\n  \"amount\": 50,\n  \"description\": \"Payment to friend\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/relationships/transfer",
+          "host": [
+            "{{baseUrl}}"
+          ],
+          "path": [
+            "relationships",
+            "transfer"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
       "name": "List Relationships",
       "request": {
         "method": "GET",
