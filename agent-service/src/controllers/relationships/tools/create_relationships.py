@@ -18,7 +18,7 @@ async def create_relationship(self, name: str, identifier: str) -> dict:
 
     async with httpx.AsyncClient() as client:
         resp = await client.post(
-            f"{os.getenv("BACKEND_URL")}/api/v1/protected/agent/relationship",
+            f"{os.getenv("BACKEND_URL")}/api/v1/agent/relationship",
             json={
                 "name": name,
                 "identifier": identifier

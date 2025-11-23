@@ -65,6 +65,9 @@ export default function LiveKitModal({ onClose, dockSide }: LiveKitModalProps) {
             process.env.NEXT_PUBLIC_LIVEKIT_URL!,
             data.token
           );
+          // await roomInstance.localParticipant.sendText(`${user}`, {
+          //   topic: "metadata",
+          // });
           setToken(data.token);
         }
       } catch (e) {
@@ -95,7 +98,7 @@ export default function LiveKitModal({ onClose, dockSide }: LiveKitModalProps) {
         <div
           className="
             pointer-events-auto
-            w-[28rem] h-[42rem]
+            w-[28rem] h-[16rem]
             rounded-2xl border border-border
             bg-white
             shadow-2xl 

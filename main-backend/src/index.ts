@@ -14,14 +14,14 @@ const app = express();
 
 app.use(
   cors({
-    origin: [process.env.FRONTEND_URL as string],
+    origin: [process.env.FRONTEND_URL as string, "*"],
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
 
 app.use(cookieParser());
-app.use(clerkMiddleware());
+// app.use(clerkMiddleware());
 app.use(express.json());
 
 // public / protected defined

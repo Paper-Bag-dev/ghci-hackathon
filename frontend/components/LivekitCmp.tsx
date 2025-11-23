@@ -86,7 +86,7 @@ function ChatUI({ chatMessages, send, isSending, username }: ChatUIProps) {
       </div>
 
       {/* Input + Send */}
-      <div className="border-t flex gap-2 items-center p-3">
+      {/* <div className="border-t flex gap-2 items-center p-3">
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
@@ -113,7 +113,7 @@ function ChatUI({ chatMessages, send, isSending, username }: ChatUIProps) {
         >
           Send
         </button>
-      </div>
+      </div> */}
     </div>
   );
 }

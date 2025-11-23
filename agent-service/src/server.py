@@ -4,6 +4,8 @@ from livekit.plugins import noise_cancellation, silero
 from livekit.plugins.turn_detector.multilingual import MultilingualModel
 from livekit import agents, rtc
 from agents.generic import GenericAssistant
+from dataclass.session_info import MySessionInfo
+from livekit.agents.voice.room_io import TextInputEvent
 import os
 import json
 
@@ -17,64 +19,59 @@ server = AgentServer()
 
 @server.rtc_session()
 async def my_agent(ctx: agents.JobContext):
-    # STEP 1: Check for participants and extract metadata FIRST
-    user_participant = None
-    user_data = None
-    
-    print("Agent ready, checking for participants...")
-    
-    if ctx.room.remote_participants:
-        user_participant = next(iter(ctx.room.remote_participants.values()))
-        print("Existing participant found:", user_participant)
-        print("Participant metadata:", user_participant.metadata)
-        
-        # Parse the metadata
-        if user_participant.metadata:
-            try:
-                user_data = json.loads(user_participant.metadata)
-                print("Parsed user data:", user_data)
-            except Exception as e:
-                print("Could not parse metadata:", e)
-    
-    # STEP 2: Create session
-    session = AgentSession(
+    session = AgentSession[MySessionInfo](
         stt=stt,
         llm=llm,
         tts=tts,
         vad=silero.VAD.load(),
         turn_detection=MultilingualModel(),
-    )
+        userdata=MySessionInfo()
+        )
     
-    # STEP 3: Start session with user data
+    @ctx.room.on("participant_connected")
+    def on_participant_connected(participant: rtc.RemoteParticipant):
+            metadata = json.loads(participant.metadata)
+            
+            # Extract the clerk ID
+            clerk_id = metadata.get("clerk", {}).get("id")
+            
+            if clerk_id:
+                session.userdata.id = clerk_id
+                print(f"Updated session with clerk ID: {clerk_id}")
+            print(f"Updated session with clerk ID: {session.userdata.id}")
+
+
     await session.start(
         room=ctx.room,
         agent=GenericAssistant(
             metadata={
-                "name": "Vikalp Sharma",
-                "role": "Your creator",
-                "user_data": user_data  # Pass the extracted user data
+                "name" : "Vikalp Sharma",
+                "role" : "Your creator"
             }
         ),
         room_options=room_io.RoomOptions(
             audio_input=room_io.AudioInputOptions(
-                noise_cancellation=lambda params: noise_cancellation.BVCTelephony() 
-                    if params.participant.kind == rtc.ParticipantKind.PARTICIPANT_KIND_SIP 
-                    else noise_cancellation.BVC(),
+                noise_cancellation=lambda params: noise_cancellation.BVCTelephony() if params.participant.kind == rtc.ParticipantKind.PARTICIPANT_KIND_SIP else noise_cancellation.BVC(),
             ),
         ),
+        
+        # room_input_options=room_io.RoomInputOptions(
+        #     text_input_cb=custom_text_input_handler
+        # )
     )
+
     
-    # STEP 4: Set up event handler for future participants
-    @ctx.room.on("participant_connected")
-    def on_participant_connected(participant: rtc.RemoteParticipant):
-        print(f"New participant connected: {participant.identity}")
-        print(f"Participant metadata: {participant.metadata}")
     
-    # STEP 5: Generate greeting
     await session.generate_reply(
         instructions="Greet the user and explain who you are in a short manner."
     )
 
+# def custom_text_input_handler(session: AgentSession, event: TextInputEvent) -> None:
+#     # Access the incoming text message
+#     message = event.text
+
+#     # Handle commands
+#     print(event.text)
 
 if __name__ == "__main__":
     agents.cli.run_app(server)

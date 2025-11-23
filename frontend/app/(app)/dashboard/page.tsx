@@ -66,7 +66,7 @@ export default function Dashboard() {
   const StatisticsCardData = [
     {
       icon: <WalletIcon className="size-4" />,
-      value: showBalance ? "$ 847,532.45" : "$ XXX,XXX",
+      value: showBalance ? "$ 567" : "$ XXX,XXX",
       title: "Available Balance",
       changePercentage: "+12.5%",
       action: (

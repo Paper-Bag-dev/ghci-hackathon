@@ -4,10 +4,51 @@ import { Room } from "livekit-client";
 
 const AppContext = createContext<any>(null);
 
+interface Reminder {
+  id: string;
+  title: string;
+  description: string;
+  date: string;
+  time: string;
+  type: string;
+  status: "active" | "completed";
+}
+
+const mockReminders: Reminder[] = [
+  {
+    id: "1",
+    title: "Loan EMI Payment",
+    description: "Pay monthly loan EMI for home loan",
+    date: "2025-01-01",
+    time: "09:00",
+    type: "payment",
+    status: "active",
+  },
+  {
+    id: "2",
+    title: "Investment Review",
+    description: "Review quarterly investment portfolio performance",
+    date: "2025-01-15",
+    time: "14:00",
+    type: "review",
+    status: "active",
+  },
+  {
+    id: "3",
+    title: "Credit Card Bill",
+    description: "Pay credit card bill before due date",
+    date: "2025-01-10",
+    time: "10:00",
+    type: "payment",
+    status: "active",
+  },
+];
+
 export const AppWrapper = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState(null);
   const [mainState, setMainState] = useState(undefined);
   const [agentAudioTrack, setAgentAudioTrack] = useState(undefined);
+  const [reminders, setReminders] = useState<Reminder[]>(mockReminders);
 
   const [roomInstance, setRoomInstance] = useState<Room | null>(null);
 
@@ -33,6 +74,8 @@ export const AppWrapper = ({ children }: { children: React.ReactNode }) => {
         agentAudioTrack,
         setAgentAudioTrack,
         roomInstance,
+        reminders,
+        setReminders,
       }}
     >
       {children}
