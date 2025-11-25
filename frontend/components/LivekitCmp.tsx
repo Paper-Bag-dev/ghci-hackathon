@@ -4,16 +4,15 @@ import {
   BarVisualizer,
   useVoiceAssistant,
   useLocalParticipant,
-  useChat,
   useTranscriptions,
+  ControlBar,
 } from "@livekit/components-react";
 import type {
   ChatMessage,
   ReceivedChatMessage,
 } from "@livekit/components-core";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useAppContext } from "@/context";
-
 interface ChatUIProps {
   chatMessages: ChatMessage[];
   send: (msg: string) => Promise<ReceivedChatMessage>;
@@ -22,14 +21,17 @@ interface ChatUIProps {
 }
 
 export default function LiveKitContent({ username }: { username: string }) {
-  const { mainState, agentAudioTrack, setAgentAudioTrack, setMainState } =
-    useAppContext();
-  const { state, audioTrack } = useVoiceAssistant();
-  // const {localParticipant} = useLocalParticipant();
-  useTranscriptions({});
+  const { setAgentAudioTrack, setMainState } = useAppContext();
+  const { state, audioTrack, agent } = useVoiceAssistant();
+  const { localParticipant } = useLocalParticipant();
+  const scrollRef = useRef<HTMLDivElement | null>(null);
 
-  const { chatMessages, send, isSending } = useChat();
-
+  const transcriptions = useTranscriptions({
+    participantIdentities: [
+      ...(agent?.identity ? [agent.identity] : []),
+      localParticipant.identity,
+    ],
+  });
   useEffect(() => {
     if (audioTrack) {
       setAgentAudioTrack(audioTrack);
@@ -37,10 +39,19 @@ export default function LiveKitContent({ username }: { username: string }) {
     setMainState(state);
   }, [audioTrack, state]);
 
+  useEffect(() => {
+    const node = scrollRef.current;
+    if (node) {
+      node.scrollTo({
+        top: node.scrollHeight,
+        behavior: "smooth",
+      });
+    }
+  }, [transcriptions]);
   return (
-    <div className="flex flex-col h-full w-full">
+    <div className="flex flex-col h-full w-full ">
       {/* Visualizer */}
-      <div className="border-b border-gray-300 flex items-center justify-center">
+      <div className="border-b border-gray-300 flex items-center justify-center flex flex-col">
         <BarVisualizer
           barCount={7}
           state={state}
@@ -48,72 +59,68 @@ export default function LiveKitContent({ username }: { username: string }) {
           style={{
             height: "6rem",
             width: "100%",
-            color: "blue",
           }}
         />
+        <div className="">
+          <ControlBar
+            variation="verbose"
+            data-lk-theme="control"
+            controls={{
+              microphone: true,
+              camera: false,
+              screenShare: false,
+              leave: true, // LiveKit will handle disconnect
+            }}
+          />
+        </div>
       </div>
 
       {/* Chat */}
       <div className="flex flex-col flex-1 overflow-hidden pt-4">
-        <ChatUI
+        {/* <ChatUI
           chatMessages={chatMessages}
           send={send}
           isSending={isSending}
           username={username}
-        />
-      </div>
-    </div>
-  );
-}
-
-function ChatUI({ chatMessages, send, isSending, username }: ChatUIProps) {
-  const [input, setInput] = useState("");
-
-  return (
-    <div className="flex flex-col h-full w-full">
-      {/* Chat messages */}
-      <div className="flex-1 overflow-y-auto px-4 py-2 space-y-2">
-        {chatMessages.map((msg) => {
-          const isSelf = msg.message.startsWith("[user]");
-
-          return (
-            <div key={msg.timestamp} className="text-sm">
-              <strong>{!isSelf ? username : "Assistant"}:</strong>{" "}
-              {msg.message.replace("[user]", "")}
-            </div>
-          );
-        })}
-      </div>
-
-      {/* Input + Send */}
-      {/* <div className="border-t flex gap-2 items-center p-3">
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Type a message..."
-          className="
-            flex-grow px-3 py-2 
-            border border-gray-300 rounded-lg 
-            focus:outline-none focus:ring-2 focus:ring-blue-500
-          "
-        />
-
-        <button
-          disabled={isSending || input.trim().length === 0}
-          onClick={async () => {
-            await send(input.trim());
-            setInput("");
-          }}
-          className="
-            px-4 py-2 rounded-lg 
-            bg-[#dbe9ff] text-white 
-            disabled:bg-gray-400
-            hover:cursor-pointer
-          "
+        /> */}
+        {/* <Chat /> */}
+        <div
+          className="flex flex-col h-full overflow-y-auto px-4 py-2"
+          ref={scrollRef}
         >
-          Send
-        </button>
-      </div> */}
+          {transcriptions.map((transcription, ind) => {
+            const isAgent =
+              transcription.participantInfo.identity.startsWith("agent");
+
+            return (
+              <div
+                key={ind}
+                className={`w-full flex my-2 ${
+                  isAgent ? "justify-start" : "justify-end"
+                }`}
+              >
+                <div
+                  className={`max-w-[80%] p-4 rounded-xl ${
+                    isAgent
+                      ? "bg-[#ecf3ff] text-black"
+                      : "bg-blue-600 text-white"
+                  }`}
+                >
+                  <strong>
+                    {isAgent
+                      ? "Choral"
+                      : transcription.participantInfo.identity}
+                    :
+                  </strong>
+                  <p className="mt-1 whitespace-pre-wrap">
+                    {transcription.text}
+                  </p>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }

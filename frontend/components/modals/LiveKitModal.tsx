@@ -98,7 +98,7 @@ export default function LiveKitModal({ onClose, dockSide }: LiveKitModalProps) {
         <div
           className="
             pointer-events-auto
-            w-[28rem] h-[16rem]
+            w-[28rem] max-h-[30rem]
             rounded-2xl border border-border
             bg-white
             shadow-2xl 
@@ -132,19 +132,6 @@ export default function LiveKitModal({ onClose, dockSide }: LiveKitModalProps) {
           <RoomContext.Provider value={roomInstance}>
             <RoomAudioRenderer />
             <LiveKitContent username={username} />
-
-            <div className="pt-3">
-              <ControlBar
-                variation="minimal"
-                data-lk-theme="control"
-                controls={{
-                  microphone: true,
-                  camera: false,
-                  screenShare: false,
-                  leave: true, // LiveKit will handle disconnect
-                }}
-              />
-            </div>
           </RoomContext.Provider>
         </div>
       </div>

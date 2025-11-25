@@ -45,7 +45,7 @@ async def my_agent(ctx: agents.JobContext):
         tts=tts,
         vad=silero.VAD.load(),
         turn_detection=MultilingualModel(),
-        userdata=MySessionInfo()
+        userdata=MySessionInfo(),
         )
 
     await session.start(

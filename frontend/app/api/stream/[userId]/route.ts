@@ -53,7 +53,7 @@ export async function POST(
   req: Request,
   context: { params: Promise<{ userId: string }> }
 ) {
-  const { userId } = await context.params; // IMPORTANT FIX
+  const { userId } = await context.params;
 
   const body = await req.json().catch(() => ({}));
   const message = body.message;

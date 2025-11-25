@@ -184,22 +184,22 @@ class GenericAssistant(Agent):
     
         return {status: False, message: "Error encountered in ui chips"}
     
-    @function_tool()
-    async def push_ui_chips(self, ctx: RunContext, data:object, ui_type: str):
-        """
-        Push UI chips to display to user with relevant info.
-        """
+    # @function_tool()
+    # async def push_ui_chips(self, ctx: RunContext, data:object, ui_type: str):
+    #     """
+    #     Push UI chips to display to user with relevant info.
+    #     """
 
-        ui_chips = [
-            {"type": "balance", "label": "Check Balance"},
-            {"type": "transaction", "label": "Recent Transactions"},
-            {"type": "transfer", "label": "Transfer Money"},
-            {"type": "loans", "label": "View Loans"},
-        ]
+    #     ui_chips = [
+    #         {"type": "balance", "label": "Check Balance"},
+    #         {"type": "transaction", "label": "Recent Transactions"},
+    #         {"type": "transfer", "label": "Transfer Money"},
+    #         {"type": "loans", "label": "View Loans"},
+    #     ]
 
-        async with httpx.AsyncClient() as client:
-            response = await client.post(
-                f"{BACKEND_URL}/api/v1/agents/ui_chips/{ctx.session.userdata.id}",
-                json={"ui_chips": ui_chips}
-            )
-            return response.json()
+    #     async with httpx.AsyncClient() as client:
+    #         response = await client.post(
+    #             f"{BACKEND_URL}/api/v1/agents/ui_chips/{ctx.session.userdata.id}",
+    #             json={"ui_chips": ui_chips}
+    #         )
+    #         return response.json()
