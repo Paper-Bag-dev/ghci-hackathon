@@ -82,30 +82,27 @@ class GenericAssistant(Agent):
         return {"status": "ok", "reminder": reminder}
 
     @function_tool()
-    async def create_transaction(self, ctx: RunContext, sendTo: str, amount: int, isId: bool = False):
+    async def create_transaction(self, ctx: RunContext, sendTo: str, amount: int):
         """
         Create a transaction for user.
         ARGS:
-        - sendTo: The receivers account id, email, phone no or relationship name
+        - sendTo: The receivers account id, email, phone no
         - amount: the amount to send
-        - isId: to signify the backend that this is not an id email or phone no but a relationship name
         Creates a reminder for the user and pushes it to the UI.
         """
 
         # push the event to the UI
         async with httpx.AsyncClient() as client:
             response = await client.post(
-                f"{BACKEND_URL}/api/v1/agents/transaction",
+                f"{BACKEND_URL}/api/v1/agents/transaction/create",
                 json={
-                        "id" : ctx.session.userdata.id,
-                        "identifier": sendTo,
+                        "fromId" : ctx.session.userdata.id,
+                        "toId": sendTo,
                         "amount" : amount,
-                        "relationship": isId
                     }
             )
             return response.json()
-    
-    
+
     @function_tool()
     async def verify_transaction(self, ctx: RunContext, otp: str):
         """
@@ -133,7 +130,7 @@ class GenericAssistant(Agent):
 
         async with httpx.AsyncClient() as client:
             response = await client.get(
-                f"{BACKEND_URL}/api/v1/agents/transaction/history/{ctx.session.userdata.id}"
+                f"{BACKEND_URL}/api/v1/agents/transaction/{ctx.session.userdata.id}"
             )
             return response.json()
         
@@ -188,7 +185,7 @@ class GenericAssistant(Agent):
         return {status: False, message: "Error encountered in ui chips"}
     
     @function_tool()
-    async def push_ui_chips(self, ctx: RunContext):
+    async def push_ui_chips(self, ctx: RunContext, data:object, ui_type: str):
         """
         Push UI chips to display to user with relevant info.
         """

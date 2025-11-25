@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useAppContext } from "@/context";
+import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
 
 interface Reminder {
   id: string;
@@ -14,7 +15,6 @@ interface Reminder {
   type: string;
   status: "active" | "completed";
 }
-
 
 export default function StreamListener() {
   const { user, isLoaded } = useUser();
@@ -32,7 +32,6 @@ export default function StreamListener() {
 
     evt.onmessage = (e) => {
       const msg = e.data;
-      console.log("📩 SSE MESSAGE:", msg);
 
       // 👉 NAVIGATION
       if (msg.startsWith("navigate:")) {
@@ -51,7 +50,7 @@ export default function StreamListener() {
           console.log("🆕 Adding reminder:", reminder);
 
           // add to reminders inside context
-          setReminders((prev:Reminder[]) => [...prev, reminder]);
+          setReminders((prev: Reminder[]) => [...prev, reminder]);
         } catch (err) {
           console.error("❌ Could not parse reminder JSON", err);
         }
@@ -67,3 +66,22 @@ export default function StreamListener() {
 
   return null;
 }
+
+const eventHandler = (evt: MessageEvent<any>, router: AppRouterInstance) => {
+  const msg = evt.data;
+  switch (msg) {
+    case msg.startsWith("navigate:"):
+      const path = msg.replace("navigate:", "");
+      router.push(path);
+      break;
+    case msg.startsWith("ui_chips:"):
+      // handle ui chips
+      break;
+    case msg === "refresh":
+      router.refresh();
+      break;
+
+    default:
+      break;
+  }
+};

@@ -2,14 +2,22 @@
 
 import { useState, useRef, useEffect } from "react";
 import LiveKitModal from "./LiveKitModal";
-import { BarVisualizer, RoomAudioRenderer, RoomContext } from "@livekit/components-react";
+import {
+  BarVisualizer,
+  RoomAudioRenderer,
+  RoomContext,
+} from "@livekit/components-react";
 import { useAppContext } from "@/context";
 
 const MINI_WIDTH = 220;
 const MINI_HEIGHT = 100;
 const MARGIN = 24;
 
-export default function LiveKitUIProvider({ children }: { children: React.ReactNode }) {
+export default function LiveKitUIProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const { mainState, agentAudioTrack, roomInstance } = useAppContext();
   const [open, setOpen] = useState(false);
   const [dockSide, setDockSide] = useState<"left" | "right">("right");
@@ -117,11 +125,17 @@ export default function LiveKitUIProvider({ children }: { children: React.ReactN
             height: MINI_HEIGHT,
           }}
         >
-          <BarVisualizer barCount={5} state={mainState} track={agentAudioTrack} />
+          <BarVisualizer
+            barCount={5}
+            state={mainState}
+            track={agentAudioTrack}
+          />
         </div>
       )}
 
-      {open && <LiveKitModal dockSide={dockSide} onClose={() => setOpen(false)} />}
+      {open && (
+        <LiveKitModal dockSide={dockSide} onClose={() => setOpen(false)} />
+      )}
     </>
   );
 }
