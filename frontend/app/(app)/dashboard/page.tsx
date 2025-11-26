@@ -45,6 +45,7 @@ import TransactionDatatable from "@/components/shadcn-studio/blocks/datatable-tr
 import { accountPortfolioData, bankingTransactions } from "@/lib/banking-data";
 import axios from "axios";
 import { useAppContext } from "@/context";
+import { useUser } from "@clerk/nextjs";
 
 // Transaction table data - Use banking transactions from data file
 const transactionData = bankingTransactions.slice(0, 25);
@@ -61,12 +62,13 @@ const portfolioData = accountPortfolioData.map((account) => ({
 export default function Dashboard() {
   // State for balance visibility
   const [showBalance, setShowBalance] = useState(false);
-  const { user, setUser } = useAppContext();
+  const [balance, setBalance] = useState(0);
+  const { user, isLoaded, isSignedIn } = useUser();
   // Statistics card data - Banking Metrics
   const StatisticsCardData = [
     {
       icon: <WalletIcon className="size-4" />,
-      value: showBalance ? "$ 567" : "$ XXX,XXX",
+      value: showBalance ? "$ " + `${balance}` : "$ XXX,XXX",
       title: "Available Balance",
       changePercentage: "+12.5%",
       action: (
@@ -104,17 +106,16 @@ export default function Dashboard() {
     },
   ];
 
-  // useEffect(() => {
-  //   const fetchUserData = async () => {
-  //     const { data } = await axios.get(
-  //       `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/protected/user`,
-  //       { withCredentials: true }
-  //     );
-  //     console.log("user Data: ", data.user);
-  //     setUser(data.user);
-  //   };
-  //   fetchUserData();
-  // }, []);
+  useEffect(() => {
+    if (!user) return;
+    const fetchUserData = async () => {
+      const { data } = await axios.get(
+        `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/agents/balance/${user.id}`
+      );
+      setBalance(data.balance);
+    };
+    fetchUserData();
+  }, [user]);
 
   return (
     <div className="p-6">

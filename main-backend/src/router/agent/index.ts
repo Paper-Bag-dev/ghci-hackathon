@@ -18,12 +18,12 @@ router.use((req, res, next) => {
 
 router.get("/balance/:id", getBal);
 router.post("/reminder/:id", createReminder);
-router.get("/ui/:id", rerouteUser);
+router.post("/ui/:id", rerouteUser);
 
 router.get("/transaction/:id", getTransactions);
 router.post("/transaction/create", createTransaction);
 router.get("/relationship/:id", getRelationships);
-router.post("/relationship", createRelationship);
+router.post("/relationship/:id/create", createRelationship);
 
 router.get("/uichips", getUICard);
 router.post("/uichips/:id", createUICard);

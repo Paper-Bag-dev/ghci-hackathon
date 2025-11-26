@@ -2,7 +2,7 @@
 
 import { RoomAudioRenderer, RoomContext } from "@livekit/components-react";
 import { useEffect, useState } from "react";
-import { UICard, useAppContext } from "@/context";
+import { UIAction, UICard, useAppContext } from "@/context";
 import axios from "axios";
 import LiveKitContent from "../LivekitCmp";
 import StatisticsCard from "../shadcn-studio/blocks/statistics-card-01";
@@ -21,16 +21,26 @@ export default function LiveKitModal({ onClose, dockSide }: LiveKitModalProps) {
   const [roomName, setRoomName] = useState("");
   const [username, setUserName] = useState("");
 
-  const handleAction = (action: any) => {
+  const handleAction = (action: UIAction) => {
+    if (!action) return;
+    console.log("action: ", action)
     switch (action.type) {
-      case "redirect":
-        router.push(action.payload);
+      case "redirect": {
+        console.log("Action tried: ", action.payload);
+        const path = action.payload.startsWith("/")
+          ? action.payload
+          : `/${action.payload}`;
+        router.push(path);
         break;
-      case "copy":
+      }
+
+      case "copy": {
         navigator.clipboard.writeText(action.payload);
         break;
+      }
+
       default:
-        console.warn("Unknown action:", action.type);
+        console.warn("Unknown action type:", action.type);
     }
   };
 
@@ -105,59 +115,51 @@ export default function LiveKitModal({ onClose, dockSide }: LiveKitModalProps) {
     <>
       {/* Backdrop */}
       <div
-        className={`fixed inset-0 z-[9999] flex ${sideAlign} pointer-events-none`}
+        className={`fixed inset-0 z-[9999] flex ${sideAlign} pointer-events-none mb-4`}
       >
-        <div className="flex-col mr-4">
+        <span className="flex-col mr-4">
           {uiCards.length > 0 && (
             <div className="w-[28rem] flex flex-col gap-3 mb-4 z-[9999]">
-              {uiCards.map((card: UICard, index: number) => (
-                <div
-                  key={index}
-                  className="slide-fade-in p-2 rounded-xl bg-white shadow-lg border border-gray-200"
-                >
-                  {card.type === "card" && (
-                    <StatisticsCard
-                      icon={<BrainIcon />}
-                      value={card.data?.value ?? ""}
-                      title={card.data?.title ?? ""}
-                      changePercentage={String(
-                        card.data?.changePercentage ?? "0"
-                      )}
-                    />
-                  )}
+              {uiCards.map((card: UICard, index: number) => {
+                const action = card.actions?.[0];
+                console.log("Action: ", action)
+                return (
+                  <div
+                    key={index}
+                    className="slide-fade-in p-2 rounded-xl bg-white shadow-lg border border-gray-200"
+                  >
+                    {/* CARD UI */}
+                    {card.type === "card" && (
+                      <StatisticsCard
+                        icon={<BrainIcon />}
+                        value={card.data?.value ?? ""}
+                        title={card.data?.title ?? ""}
+                        changePercentage={String(
+                          card.data?.changePercentage ?? "0"
+                        )}
+                      />
+                    )}
 
-                  {card.type === "chip" && (
-                    <button
-                      className="px-4 py-2 rounded-full bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
-                      onClick={() => handleAction(card.actions?.[0])}
-                    >
-                      {card.data?.label}
-                    </button>
-                  )}
-
-                  {card.actions && card.actions.length > 0 && (
-                    <div className="flex gap-2 mt-2">
-                      {card.actions.map((action, i) => (
-                        <button
-                          key={i}
-                          onClick={() => handleAction(action)}
-                          className="px-3 py-1 text-sm rounded-md border border-gray-300 hover:bg-gray-100 transition"
-                        >
-                          {action.label}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
+                    {/* CHIP UI */}
+                    {card.type === "chip" && (
+                      <button
+                        className="px-4 py-2 rounded-full bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
+                        onClick={() => action && handleAction(action)}
+                      >
+                        {card.data?.label ?? action?.label}
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
             </div>
           )}
-        </div>
+        </span>
 
         <div
-          className="
+          className=" 
             pointer-events-auto
-            w-[28rem] max-h-[30rem]
+            w-[28rem] h-[40rem]
             rounded-2xl border border-border
             bg-white
             shadow-2xl 

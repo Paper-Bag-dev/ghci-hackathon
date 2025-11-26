@@ -6,6 +6,7 @@ export interface IUser extends Document {
   email: string;
   role: "local" | "google" | "clerk";
   clerkId?: string;
+  phone?: string;
   password?: string;
   googleId?: string;
   firstName?: string;
@@ -64,6 +65,9 @@ const userSchema = new Schema<IUser>(
     },
 
     image: {
+      type: String,
+    },
+    phone: {
       type: String,
     },
   },

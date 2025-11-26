@@ -2,7 +2,9 @@ import { Schema, model, Document, Types } from "mongoose";
 
 export interface IRelationship extends Document {
   owner: Types.ObjectId;
+  ownerClerkId: string;
   targetUser: Types.ObjectId;
+  targetClerkId: string;
   nickname: string;
   notes?: string;
 }
@@ -16,12 +18,22 @@ const relationshipSchema = new Schema<IRelationship>(
       index: true,
     },
 
+    ownerClerkId: {
+      type: String,
+      required: true,
+      index: true,
+    },
+
     targetUser: {
       type: Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
 
+    targetClerkId: {
+      type: String,
+      required: true,
+    },
     nickname: {
       type: String,
       required: true,

@@ -24,55 +24,101 @@ export const performTransfer = async (
   amount: number,
   description?: string
 ) => {
-  const session = await mongoose.startSession();
   try {
     if (!fromId || !toId || !amount)
       throw { status: 400, message: "Missing fields" };
+
     const numeric = Number(amount);
     if (numeric <= 0) throw { status: 400, message: "Amount must be > 0" };
 
-    session.startTransaction();
-    const fromUser = await User.findById(fromId).session(session);
-    const toUser = await User.findById(toId).session(session);
+    const fromUser = await User.findOne({ clerkId: fromId });
+    const toUser = await User.findOne({ clerkId: toId }); // <-- fixed: was using fromId by mistake
+
     if (!fromUser || !toUser) {
-      await session.abortTransaction();
       throw { status: 404, message: "User(s) not found" };
     }
 
     if (fromUser.balance < numeric) {
-      await session.abortTransaction();
       throw { status: 400, message: "Insufficient funds" };
     }
 
     fromUser.balance -= numeric;
     toUser.balance += numeric;
 
-    await fromUser.save({ session });
-    await toUser.save({ session });
+    await fromUser.save();
+    await toUser.save();
 
-    const txs = await Transaction.create(
-      [
-        {
-          from: fromUser._id,
-          to: toUser._id,
-          amount: numeric,
-          type: "transfer",
-          description,
-          status: "completed",
-        },
-      ],
-      { session }
-    );
+    const tx = await Transaction.create({
+      from: fromUser._id,
+      to: toUser._id,
+      amount: numeric,
+      type: "transfer",
+      description,
+      status: "completed",
+    });
 
-    await session.commitTransaction();
-    session.endSession();
-    return txs[0];
+    return tx;
   } catch (error) {
-    await session.abortTransaction();
-    session.endSession();
     throw error;
   }
 };
+
+
+// export const performTransfer = async (
+//   fromId: string,
+//   toId: string,
+//   amount: number,
+//   description?: string
+// ) => {
+//   const session = await mongoose.startSession();
+//   try {
+//     if (!fromId || !toId || !amount)
+//       throw { status: 400, message: "Missing fields" };
+//     const numeric = Number(amount);
+//     if (numeric <= 0) throw { status: 400, message: "Amount must be > 0" };
+
+//     session.startTransaction();
+//     const fromUser = await User.findOne({ clerkId: fromId }).session(session);
+//     const toUser = await User.findOne({ clerkId: fromId }).session(session);
+//     if (!fromUser || !toUser) {
+//       await session.abortTransaction();
+//       throw { status: 404, message: "User(s) not found" };
+//     }
+
+//     if (fromUser.balance < numeric) {
+//       await session.abortTransaction();
+//       throw { status: 400, message: "Insufficient funds" };
+//     }
+
+//     fromUser.balance -= numeric;
+//     toUser.balance += numeric;
+
+//     await fromUser.save({ session });
+//     await toUser.save({ session });
+
+//     const txs = await Transaction.create(
+//       [
+//         {
+//           from: fromUser._id,
+//           to: toUser._id,
+//           amount: numeric,
+//           type: "transfer",
+//           description,
+//           status: "completed",
+//         },
+//       ],
+//       { session }
+//     );
+
+//     await session.commitTransaction();
+//     session.endSession();
+//     return txs[0];
+//   } catch (error) {
+//     await session.abortTransaction();
+//     session.endSession();
+//     throw error;
+//   }
+// };
 
 export const getTransactions = async (req: Request, res: Response) => {
   try {

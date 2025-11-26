@@ -5,6 +5,7 @@ import { useUser } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useAppContext } from "@/context";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import { routeMap } from "@/utils/RoutesMap";
 
 interface Reminder {
   id: string;
@@ -50,7 +51,12 @@ const eventHandler = (
 
   switch (true) {
     case msg.startsWith("navigate:"): {
-      const path = msg.replace("navigate:", "");
+      const rawPath = msg.replace("navigate:", "").trim();
+      if (rawPath === "refresh") {
+        router.refresh();
+        break;
+      }
+      const path = routeMap[rawPath];
       console.log("➡️ Navigating to:", path);
       router.push(path);
       break;
@@ -69,13 +75,13 @@ const eventHandler = (
 
     case msg.startsWith("ui_card:"): {
       try {
-        const card = JSON.parse(msg.replace("ui_card:", ""));
-        console.log("🃏 UI Card received:", card);
+        const raw = msg.replace("ui_card:", "");
+        const parsed = JSON.parse(raw);
+        const cards = Array.isArray(parsed) ? parsed : [parsed];
 
-        setUICards((prev: any[]) => [
-          ...prev,
-          ...(Array.isArray(card) ? card : [card]),
-        ]);
+        console.log("🃏 Parsed UI Cards:", cards);
+
+        setUICards((prev: any[]) => [...prev, ...cards]);
 
         setTimeout(() => {
           setUICards((prev: any[]) => prev.slice(1));
@@ -83,12 +89,6 @@ const eventHandler = (
       } catch (err) {
         console.error("❌ Failed to parse UI Card:", err);
       }
-      break;
-    }
-
-    case msg === "refresh": {
-      console.log("🔄 Refreshing page...");
-      router.refresh();
       break;
     }
 
