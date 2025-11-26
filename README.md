@@ -49,7 +49,8 @@ FinChorus understands everyday language for tasks like:
 FinChorus is split into clean, independent services that can be deployed and tested separately.  
 This keeps everything simple, scalable and easy for judges to understand.
 
-
+### 5. Fully Responsive
+- Built in mind to deploy as a PWA along with customized ShadCn, TailwindCSS and server rendered components.
 
 ## ⚙️ Tech Stack
 
@@ -120,14 +121,16 @@ CLERKID=
 
 ## 🧠 How It Works
 
-1. User speaks and LiveKit streams the audio  
-2. AssemblyAI converts audio to text  
-3. GPT 4.1 mini understands intent and triggers tools  
-4. Backend performs the requested operation  
-5. Cartesia Sonic 3 generates a natural voice response  
-6. LiveKit streams it back instantly  
+1. User logs in and joins a secure room 
+2. User speaks and LiveKit streams the audio  
+3. AssemblyAI converts audio to text
+4. GPT 4.1 mini understands intent and triggers tools  
+5. Backend performs the requested operation  
+6. Cartesia Sonic 3 generates a natural voice response  
+7. LiveKit streams it back instantly
+8. User then can follow up, ask questions, perform actions all via voice.  
 
-Everything works in real time and feels smooth to use.
+Everything works in real time and feels smooth to use with the ability to create actions and perform operations on the frontend as well as the backend.
 
 
 
