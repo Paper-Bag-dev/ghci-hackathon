@@ -123,7 +123,9 @@ CLERKID=
 
 ### bank-mock-service (.env)
 ```
-
+MONGO_URL = "mongodb://localhost:27017"
+PORT = 4000
+FRONTEND_URL = http://localhost:5000
 ```
 
 ## 🧠 How It Works
