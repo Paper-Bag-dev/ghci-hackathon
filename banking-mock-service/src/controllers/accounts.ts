@@ -4,7 +4,7 @@ import User from "../models/User.js";
 export const getBalance = async (req: Request, res: Response) => {
   try {
     const { userId } = req.params;
-    const user = await User.findById(userId).select(
+    const user = await User.findOne({clerkId: userId}).select(
       "firstName lastName email balance"
     );
     if (!user) return res.status(404).json({ message: "User not found" });

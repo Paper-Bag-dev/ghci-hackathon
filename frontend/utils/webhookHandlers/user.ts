@@ -15,7 +15,7 @@ async function handleUserCreated(user: UserJSON) {
   const primaryEmail = email_addresses.find(
     (e) => e.id === primary_email_address_id
   )?.email_address;
-
+  console.log("Test Fire!");
   await axios.post(`${process.env.BACKEND_URL}/api/v1/public/user`, {
     clerkId: id,
     username: username,

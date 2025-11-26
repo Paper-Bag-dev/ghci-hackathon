@@ -1,43 +1,35 @@
 "use client";
 
-import {
-  ControlBar,
-  GridLayout,
-  ParticipantTile,
-  RoomAudioRenderer,
-  useTracks,
-  RoomContext,
-  Chat,
-  BarVisualizer,
-} from "@livekit/components-react";
-import { Room, Track } from "livekit-client";
+import { RoomAudioRenderer, RoomContext } from "@livekit/components-react";
+import { Room } from "livekit-client";
 import "@livekit/components-styles";
 import { useEffect, useState } from "react";
 import { useAppContext } from "@/context";
 import LiveKitModal from "@/components/modals/LiveKitModal";
+import axios from "axios";
 
 export default function RoomPage() {
   const { user } = useAppContext();
-  const [token, setToken] = useState();
-  // TODO: get user input for room and name
+  const [token, setToken] = useState<string>();
+  const [dispatchDone, setDispatchDone] = useState(false);
+
   const room = `session-${Date.now()}`;
   const name = `quickstart-user`;
-  const [roomInstance, setRoomInstance] = useState<Room | undefined>(undefined);
 
+  const [roomInstance, setRoomInstance] = useState<Room | undefined>(undefined);
+  const [open, setOpen] = useState(true);
+
+  // Create livekit room instance
   useEffect(() => {
-    const room = new Room({
-      adaptiveStream: true,
-      dynacast: true,
-    });
+    const room = new Room({ adaptiveStream: true, dynacast: true });
     setRoomInstance(room);
 
     return () => {
-      console.log("Disconnecting room on unmount…");
       room.disconnect();
     };
   }, []);
-  const [open, setOpen] = useState(true);
 
+  // Connect to LiveKit + dispatch agent
   useEffect(() => {
     if (!roomInstance) return;
 
@@ -45,8 +37,9 @@ export default function RoomPage() {
 
     (async () => {
       try {
+        // 1. Request LiveKit token from Node backend
         const resp = await fetch(
-          `/api/token?room=${room}&username=${name}&userData=${encodeURIComponent(
+          `/api/token?room=test-effect&username=Reno&userData=${encodeURIComponent(
             JSON.stringify(user)
           )}`
         );
@@ -55,14 +48,29 @@ export default function RoomPage() {
         if (!mounted) return;
 
         if (data.token) {
+          // 2. Connect to room
           await roomInstance.connect(
             process.env.NEXT_PUBLIC_LIVEKIT_URL!,
             data.token
           );
           setToken(data.token);
+
+          if (!dispatchDone) {
+            await axios.post(
+              `${process.env.NEXT_PUBLIC_BACKEND_URL}/api/v1/protected/user/dispatch`,
+              {
+                room,
+                user,
+              },
+              { withCredentials: true }
+            );
+
+            setDispatchDone(true);
+            console.log("Agent dispatched!");
+          }
         }
-      } catch (e) {
-        console.error(e);
+      } catch (err) {
+        console.error(err);
       }
     })();
 
@@ -72,30 +80,12 @@ export default function RoomPage() {
     };
   }, [roomInstance]);
 
-  if (!roomInstance) {
-    return <div>Loading room instance…</div>;
-  }
-
-  if (!token) {
-    return <div>Loading connection…</div>;
-  }
+  if (!roomInstance) return <div>Loading room instance…</div>;
+  if (!token) return <div>Loading connection…</div>;
 
   return (
     <RoomContext.Provider value={roomInstance}>
       <div data-lk-theme="default" style={{ height: "100dvh" }}>
-        {/* <MyVideoConference /> */}
-        {/* <RoomAudioRenderer />
-        <ControlBar
-          variation="minimal"
-          controls={{
-            microphone: true,
-            camera: false,
-            screenShare: false,
-            leave: true,
-          }}
-        />
-        <Chat />
-        <BarVisualizer /> */}
         <div>
           <button
             className="px-4 py-2 bg-blue-500 text-white rounded-lg"
@@ -104,7 +94,7 @@ export default function RoomPage() {
             Open Voice Assistant
           </button>
 
-          <LiveKitModal onClose={() => setOpen(false)} />
+          {/* <LiveKitModal onClose={() => setOpen(false)} /> */}
         </div>
       </div>
     </RoomContext.Provider>
