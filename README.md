@@ -26,18 +26,19 @@ architecture explaination: https://drive.google.com/file/d/1-gRD_t1zeTwdNjJJUZ-7
 
 ## 🧩 Core Features
 
-### 1. Voice Based Banking
+### 1. Voice Based Banking Features
 FinChorus understands everyday language for tasks like:
 
-- Checking balances
-- Guiding and controlling the interface
-- Mock fund transfers
-- Viewing recent transactions
-- Asking about loans, interest rates or credit limits
-- Setting reminders or alerts
-- Automatically understand and perform actions in the user's language.
-- Create relationships between users.
-- Instantly check any detail via self generating UI components.
+- [x] Checking balances
+- [x] Guiding and controlling the interface
+- [x] Mock fund transfers
+- [x] Viewing recent transactions
+- [x] Asking about loans, interest rates or credit limits
+- [x] Setting reminders or alerts
+- [x] Automatically understand and perform actions in the user's language.
+- [x] Create relationships between users.
+- [x] Instantly check any detail via self generating UI components.
+
 
 ### 2. Real Time Conversational Intelligence
 - STT: AssemblyAI Universal Streaming  
@@ -142,6 +143,12 @@ FRONTEND_URL = http://localhost:5000
 8. User then can follow up, ask questions, perform actions all via voice.  
 
 Everything works in real time and feels smooth to use with the ability to create actions and perform operations on the frontend as well as the backend.
+
+**Todo:**
+- [] Convert frontend to PWA
+- [] OTP (Free Otp auth services unavailable or very limited)
+- [] Deploy to Cloud Providers
+- [] Voice biometrics
 
 ## How To Run?
 ### Requirements:
