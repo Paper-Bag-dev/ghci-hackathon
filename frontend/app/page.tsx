@@ -5,14 +5,22 @@ import {
   SignedOut,
   SignInButton,
   SignUpButton,
+  useClerk,
   UserButton,
 } from "@clerk/nextjs";
+import axios from "axios";
 import Image from "next/image";
+import { useState } from "react";
+import {} from "@clerk/nextjs";
 
 export default function Home() {
+  const [showGuestModal, setShowGuestModal] = useState(false);
+  const [guestName, setGuestName] = useState("");
+  const { setActive } = useClerk();
   return (
     <>
       {/* HEADER */}
+
       <header className="flex justify-between items-center px-6 py-4 h-16 border-b border-zinc-200 dark:border-zinc-800 bg-white dark:bg-black">
         <div className="flex items-center gap-3">
           {/* <Image
@@ -29,6 +37,12 @@ export default function Home() {
 
         <div className="flex items-center gap-4">
           <SignedOut>
+            {/* <button
+              onClick={() => setShowGuestModal(true)}
+              className="rounded-full px-5 py-2 text-sm text-zinc-900 dark:text-white hover:bg-[#f4f4f5] border-2 dark:hover:bg-[#f4f4f5]"
+            >
+              Continue as Guest
+            </button> */}
             <SignInButton forceRedirectUrl={"/dashboard"}>
               <button className="rounded-full px-5 py-2 bg-transparent border border-zinc-300 dark:border-zinc-700 text-sm text-zinc-900 dark:text-white hover:bg-zinc-100 dark:hover:bg-zinc-800">
                 Sign In

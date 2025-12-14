@@ -203,9 +203,11 @@ export default function AlertsRemindersPage() {
   }).length;
 
   // Reminder calculations
-  const activeReminders = reminders.filter((r) => r.status === "active").length;
+  const activeReminders = reminders.filter(
+    (r: any) => r.status === "active"
+  ).length;
   const completedReminders = reminders.filter(
-    (r:any) => r.status === "completed"
+    (r: any) => r.status === "completed"
   ).length;
 
   const statisticsCardData = [
@@ -288,7 +290,7 @@ export default function AlertsRemindersPage() {
   };
 
   const handleDeleteReminder = (id: string) => {
-    setReminders(reminders.filter((r) => r.id !== id));
+    setReminders(reminders.filter((r: any) => r.id !== id));
   };
 
   const getReminderTypeBadge = (type: string) => {
@@ -305,9 +307,7 @@ export default function AlertsRemindersPage() {
     );
   };
 
-  useEffect(() => {
-
-  }, [reminders])
+  useEffect(() => {}, [reminders]);
 
   return (
     <div className="p-6">
@@ -691,7 +691,7 @@ export default function AlertsRemindersPage() {
                       </CardContent>
                     </Card>
                   ) : (
-                    reminders.map((reminder) => (
+                    reminders.map((reminder: any) => (
                       <Card key={reminder.id}>
                         <CardHeader>
                           <div className="flex items-start justify-between">
