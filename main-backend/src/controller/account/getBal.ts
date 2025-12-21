@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import UserModel from "../../models/user";
+import axios from "axios";
 
 export const getBal = async (
   req: Request,
@@ -9,19 +10,14 @@ export const getBal = async (
   try {
     const { id } = req.params;
 
-    // const user = await UserModel.findOne({ clerkId: id });
+    const { data } = await axios.get(
+      `${process.env.MOCK_BANK_API}/api/accounts/${id}/balance`
+    );
 
-    // if (!user) {
-    //   return res.status(404).json({
-    //     status: false,
-    //     message: "User not found.",
-    //   });
-    // }
-    console.log("Testd");
     return res.json({
       status: true,
-      balance: "567 $",
-      message: `This is the user's current account balance stored in our internal database.`,
+      balance: data.balance,
+      message: `This is the user's current account balance stored in the bank db.`,
     });
   } catch (error) {
     console.log("Error - getBal:", error);

@@ -231,4 +231,21 @@
 [data-lk-theme="custom"] .lk-control-bar button {
   border-color: #1f8cf9 !important;
   background: #dbe9ff !important;
+  border-radius: 8px !important;
+}
+
+[data-lk-theme="custom"] .lk-control-bar button:hover {
+  border-color: #13589d !important;
+  background: #1f8cf9 !important;
+  border-radius: 8px !important;
+  color: #ecf3ff;
+  transition: background 0.25s ease, border-color 0.25s ease,
+    transform 0.2s ease;
+}
+
+.lk-audio-bar {
+  background-color: #ccd9ef !important;
+}
+.lk-audio-bar.lk-highlighted {
+  background-color: #89b4fa !important;
 }

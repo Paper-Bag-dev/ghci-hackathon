@@ -1,0 +1,15 @@
+export const routeMap: Record<string, string> = {
+  dashboard: "/dashboard",
+  account: "/dashboard/account",
+  alerts: "/dashboard/alerts-notifications",
+  cards: "/dashboard/card-management",
+  deposits: "/dashboard/deposit-services",
+  investments: "/dashboard/net-banking/investments",
+  create_investment: "/dashboard/net-banking/investments/create",
+  loans: "/dashboard/net-banking/loans",
+  create_loan: "/dashboard/net-banking/loans/create",
+  create_deposits: "/dashboard/net-banking/deposits",
+  alerts_reminders: "/dashboard/alerts-notifications",
+  settings: "/dashboard/settings",
+  refresh: "refresh",
+};

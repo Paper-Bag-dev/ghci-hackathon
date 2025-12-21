@@ -4,6 +4,23 @@ import { Room } from "livekit-client";
 
 const AppContext = createContext<any>(null);
 
+export interface UIAction {
+  type: "redirect" | "copy" | string;
+  label: string;
+  payload: string;
+}
+
+export interface UICard {
+  type: "card" | "chip";
+  data: {
+    title?: string;
+    value?: string;
+    changePercentage?: number;
+    label?: string;
+  };
+  actions?: UIAction[];
+}
+
 interface Reminder {
   id: string;
   title: string;
@@ -49,6 +66,7 @@ export const AppWrapper = ({ children }: { children: React.ReactNode }) => {
   const [mainState, setMainState] = useState(undefined);
   const [agentAudioTrack, setAgentAudioTrack] = useState(undefined);
   const [reminders, setReminders] = useState<Reminder[]>(mockReminders);
+  const [uiCards, setUICards] = useState<UICard[]>([]);
 
   const [roomInstance, setRoomInstance] = useState<Room | null>(null);
 
@@ -76,6 +94,8 @@ export const AppWrapper = ({ children }: { children: React.ReactNode }) => {
         roomInstance,
         reminders,
         setReminders,
+        uiCards,
+        setUICards,
       }}
     >
       {children}

@@ -4,10 +4,11 @@ FinChorus is a voice-driven banking assistant built for natural, fast and secure
 Made for Theme Statement 4: AI Voice Assistant for Financial Operations.  
 This project shows a complete end to end conversational banking experience powered by real-time voice tech and a modern AI stack.
 
+<img width="1918" height="1030" alt="image" src="https://github.com/user-attachments/assets/a5f633dd-dc00-402e-a703-c6be7839f4d3" />
+
+<img width="1607" height="806" alt="image" src="https://github.com/user-attachments/assets/62e0e353-7e66-4a96-967b-44016a4c663e" />
+
 ![WhatsApp Image 2025-11-23 at 22 35 41_a7be34c3](https://github.com/user-attachments/assets/7eb77324-a2b6-4b71-b2c3-a7161fb25a68)
-
-<img width="1916" height="967" alt="image" src="https://github.com/user-attachments/assets/381f5867-77c7-412d-bcb3-fbe78e3c303a" />
-
 
 
 ## 🎯 Project Overview
@@ -17,22 +18,27 @@ FinChorus fixes that by letting users talk to their bank directly using natural 
 
 It brings together real-time audio streaming, solid backend systems and smart reasoning to create a smooth, almost human experience.
 
+For detailed demo dive and explaination check out our demo: https://drive.google.com/file/d/1yxvGFXCTzOc7BuxOin8RhmiMcW-Q0zZ1/view?usp=sharing
+
 ### Sys Architecture:   
 <img width="1236" height="660" alt="file_2025-11-23_10 30 37 1" src="https://github.com/user-attachments/assets/7b2948ca-45ae-4370-acfc-d1ab1c43e0bc" />
-
+architecture explaination: https://drive.google.com/file/d/1-gRD_t1zeTwdNjJJUZ-7EFJMr7leKOht/view?usp=sharing
 
 ## 🧩 Core Features
 
-### 1. Voice Based Banking
+### 1. Voice Based Banking Features
 FinChorus understands everyday language for tasks like:
 
-- Checking balances
-- Guiding and controlling the interface
-- Mock fund transfers
-- Viewing recent transactions
-- Asking about loans, interest rates or credit limits
-- Setting reminders or alerts
-- Automatically understand and perform actions in the user's language.
+- [x] Checking balances
+- [x] Guiding and controlling the interface
+- [x] Mock fund transfers
+- [x] Viewing recent transactions
+- [x] Asking about loans, interest rates or credit limits
+- [x] Setting reminders or alerts
+- [x] Automatically understand and perform actions in the user's language.
+- [x] Create relationships between users.
+- [x] Instantly check any detail via self generating UI components.
+
 
 ### 2. Real Time Conversational Intelligence
 - STT: AssemblyAI Universal Streaming  
@@ -49,7 +55,8 @@ FinChorus understands everyday language for tasks like:
 FinChorus is split into clean, independent services that can be deployed and tested separately.  
 This keeps everything simple, scalable and easy for judges to understand.
 
-
+### 5. Fully Responsive
+- Built in mind to deploy as a PWA along with customized ShadCn, TailwindCSS and server rendered components.
 
 ## ⚙️ Tech Stack
 
@@ -106,7 +113,7 @@ LIVEKIT_URL=
 NEXT_PUBLIC_LIVEKIT_URL=
 NEXT_PUBLIC_BACKEND_URL=http://localhost:5000
 ```
-### Backend (.env)
+### main-Backend (.env)
 ```
 MONGO_URI=mongodb://localhost:27017
 PORT=5000
@@ -117,19 +124,48 @@ CLERK_SECRET_KEY=
 CLERKID=
 ```
 
+### bank-mock-service (.env)
+```
+MONGO_URL = "mongodb://localhost:27017"
+PORT = 4000
+FRONTEND_URL = http://localhost:5000
+```
 
 ## 🧠 How It Works
 
-1. User speaks and LiveKit streams the audio  
-2. AssemblyAI converts audio to text  
-3. GPT 4.1 mini understands intent and triggers tools  
-4. Backend performs the requested operation  
-5. Cartesia Sonic 3 generates a natural voice response  
-6. LiveKit streams it back instantly  
+1. User logs in and joins a secure room 
+2. User speaks and LiveKit streams the audio  
+3. AssemblyAI converts audio to text
+4. GPT 4.1 mini understands intent and triggers tools  
+5. Backend performs the requested operation  
+6. Cartesia Sonic 3 generates a natural voice response  
+7. LiveKit streams it back instantly
+8. User then can follow up, ask questions, perform actions all via voice.  
 
-Everything works in real time and feels smooth to use.
+Everything works in real time and feels smooth to use with the ability to create actions and perform operations on the frontend as well as the backend.
 
+**Todo:**
+- [ ] Convert frontend to PWA
+- [ ] OTP (Free Otp auth services unavailable or very limited)
+- [ ] Deploy to Cloud Providers
+- [ ] Voice biometrics
 
+## How To Run?
+### Requirements:
+1. Node.js 
+2. Python 
+3. MongoDB (local or provider uri)
+
+**Steps**
+1. Fork this repo and populate the .env files above with the correct envs provided.
+3. Install packages in each repo by running the following commands.
+   1. ```npm install``` in (banking-mock-service, frontend, main-backend)
+   2. ```pip install -r requirements.txt``` in (agent-service)
+4. Signup for accounts in Clerk & LiveKit to generate testable API keys.
+5. In seperate terminals run the following commands in each repo to test the repository.
+   1. npm run dev in (banking-mock-service, frontend, main-backend) Note: Build commands are available please refer package.json.
+   2. uv run src/server.py dev (to run livekit agent server in dev mode).
+6. Go to ```http://localhost:3000``` and sign up to create an account with Clerk on the application.
 
 ## 🏁 Conclusion
 

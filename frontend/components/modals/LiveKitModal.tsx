@@ -1,14 +1,13 @@
 "use client";
 
-import {
-  ControlBar,
-  RoomAudioRenderer,
-  RoomContext,
-} from "@livekit/components-react";
+import { RoomAudioRenderer, RoomContext } from "@livekit/components-react";
 import { useEffect, useState } from "react";
-import { useAppContext } from "@/context";
+import { UIAction, UICard, useAppContext } from "@/context";
 import axios from "axios";
 import LiveKitContent from "../LivekitCmp";
+import StatisticsCard from "../shadcn-studio/blocks/statistics-card-01";
+import { useRouter } from "next/navigation";
+import { BrainIcon } from "lucide-react";
 
 type LiveKitModalProps = {
   onClose: () => void;
@@ -16,11 +15,34 @@ type LiveKitModalProps = {
 };
 
 export default function LiveKitModal({ onClose, dockSide }: LiveKitModalProps) {
-  const { user, setUser, roomInstance } = useAppContext();
-
+  const { user, setUser, roomInstance, uiCards } = useAppContext();
+  const router = useRouter();
   const [token, setToken] = useState<string | undefined>();
   const [roomName, setRoomName] = useState("");
   const [username, setUserName] = useState("");
+
+  const handleAction = (action: UIAction) => {
+    if (!action) return;
+    console.log("action: ", action)
+    switch (action.type) {
+      case "redirect": {
+        console.log("Action tried: ", action.payload);
+        const path = action.payload.startsWith("/")
+          ? action.payload
+          : `/${action.payload}`;
+        router.push(path);
+        break;
+      }
+
+      case "copy": {
+        navigator.clipboard.writeText(action.payload);
+        break;
+      }
+
+      default:
+        console.warn("Unknown action type:", action.type);
+    }
+  };
 
   /** Fetch user, set roomName and username */
   useEffect(() => {
@@ -93,12 +115,51 @@ export default function LiveKitModal({ onClose, dockSide }: LiveKitModalProps) {
     <>
       {/* Backdrop */}
       <div
-        className={`fixed inset-0 z-[9999] flex ${sideAlign} pb-6 pointer-events-none`}
+        className={`fixed inset-0 z-[9999] flex ${sideAlign} pointer-events-none mb-4`}
       >
+        <span className="flex-col mr-4">
+          {uiCards.length > 0 && (
+            <div className="w-[28rem] flex flex-col gap-3 mb-4 z-[9999]">
+              {uiCards.map((card: UICard, index: number) => {
+                const action = card.actions?.[0];
+                console.log("Action: ", action)
+                return (
+                  <div
+                    key={index}
+                    className="slide-fade-in p-2 rounded-xl bg-white shadow-lg border border-gray-200"
+                  >
+                    {/* CARD UI */}
+                    {card.type === "card" && (
+                      <StatisticsCard
+                        icon={<BrainIcon />}
+                        value={card.data?.value ?? ""}
+                        title={card.data?.title ?? ""}
+                        changePercentage={String(
+                          card.data?.changePercentage ?? "0"
+                        )}
+                      />
+                    )}
+
+                    {/* CHIP UI */}
+                    {card.type === "chip" && (
+                      <button
+                        className="px-4 py-2 rounded-full bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
+                        onClick={() => action && handleAction(action)}
+                      >
+                        {card.data?.label ?? action?.label}
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          )}
+        </span>
+
         <div
-          className="
+          className=" 
             pointer-events-auto
-            w-[28rem] h-[16rem]
+            w-[28rem] h-[40rem]
             rounded-2xl border border-border
             bg-white
             shadow-2xl 
@@ -132,19 +193,6 @@ export default function LiveKitModal({ onClose, dockSide }: LiveKitModalProps) {
           <RoomContext.Provider value={roomInstance}>
             <RoomAudioRenderer />
             <LiveKitContent username={username} />
-
-            <div className="pt-3">
-              <ControlBar
-                variation="minimal"
-                data-lk-theme="control"
-                controls={{
-                  microphone: true,
-                  camera: false,
-                  screenShare: false,
-                  leave: true, // LiveKit will handle disconnect
-                }}
-              />
-            </div>
           </RoomContext.Provider>
         </div>
       </div>

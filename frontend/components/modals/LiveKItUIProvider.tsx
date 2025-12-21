@@ -2,14 +2,22 @@
 
 import { useState, useRef, useEffect } from "react";
 import LiveKitModal from "./LiveKitModal";
-import { BarVisualizer, RoomAudioRenderer, RoomContext } from "@livekit/components-react";
+import {
+  BarVisualizer,
+  RoomAudioRenderer,
+  RoomContext,
+} from "@livekit/components-react";
 import { useAppContext } from "@/context";
 
 const MINI_WIDTH = 220;
 const MINI_HEIGHT = 100;
 const MARGIN = 24;
 
-export default function LiveKitUIProvider({ children }: { children: React.ReactNode }) {
+export default function LiveKitUIProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   const { mainState, agentAudioTrack, roomInstance } = useAppContext();
   const [open, setOpen] = useState(false);
   const [dockSide, setDockSide] = useState<"left" | "right">("right");
@@ -55,13 +63,11 @@ export default function LiveKitUIProvider({ children }: { children: React.ReactN
     if (!dragging.current) return;
     dragging.current = false;
 
-    // CLICK → open modal
     if (!moved.current) {
       setOpen(true);
       return;
     }
 
-    // --- SNAP ONLY BOTTOM LEFT/RIGHT ---
     const width = window.innerWidth;
 
     const snapSide: "left" | "right" =
@@ -91,7 +97,6 @@ export default function LiveKitUIProvider({ children }: { children: React.ReactN
 
   return (
     <>
-      {/** 🔊 GLOBAL AUDIO RENDERER — ALWAYS ON */}
       {roomInstance && (
         <RoomContext.Provider value={roomInstance}>
           <RoomAudioRenderer />
@@ -120,12 +125,17 @@ export default function LiveKitUIProvider({ children }: { children: React.ReactN
             height: MINI_HEIGHT,
           }}
         >
-          <BarVisualizer barCount={5} state={mainState} track={agentAudioTrack} />
+          <BarVisualizer
+            barCount={5}
+            state={mainState}
+            track={agentAudioTrack}
+          />
         </div>
       )}
 
-      {/* FULL MODAL WHEN OPEN */}
-      {open && <LiveKitModal dockSide={dockSide} onClose={() => setOpen(false)} />}
+      {open && (
+        <LiveKitModal dockSide={dockSide} onClose={() => setOpen(false)} />
+      )}
     </>
   );
 }
